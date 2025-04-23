@@ -4,28 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mở bằng Chrome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f0f0f5;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Nút để mở trong Chrome -->
+<h2>Mở liên kết bằng Chrome</h2>
 <button onclick="openInChrome()">Mở bằng Chrome</button>
 
-<script>
-function openInChrome() {
-    let currentUrl = window.location.href;  // Lấy URL hiện tại của trang
-    let strippedUrl = currentUrl.replace(/^https?:\/\//, '');  // Bỏ "http://" hoặc "https://"
-    let intentUrl = `intent://${strippedUrl}#Intent;package=com.android.chrome;scheme=https;end;`;
+<div id="message"></div>
 
-    // Hộp thoại xác nhận người dùng có muốn mở bằng Chrome không
-    if (confirm("Bạn có muốn mở liên kết này bằng Chrome không?")) {
-        window.location.href = intentUrl;  // Sử dụng intent:// để mở bằng Chrome
-    } else {
-        alert("Bạn đã chọn không mở trong Chrome.");
+<script>
+// Kiểm tra có phải Chrome thật không
+function isRealChrome() {
+    const ua = navigator.userAgent;
+
+    if (ua.includes("; wv") || ua.includes("Version/4.0")) {
+        return false;
     }
 
-    // Nếu không thể mở bằng intent, sẽ mở bằng cửa sổ mới trong trình duyệt mặc định
+    if (ua.includes("Chrome/") && !ua.includes("Edg/") && !ua.includes("OPR/") && !ua.includes("; wv")) {
+        return true;
+    }
+
+    return false;
+}
+
+// Hàm mở liên kết trong Chrome bằng intent
+function openInChrome() {
+    const messageDiv = document.getElementById("message");
+    let currentUrl = window.location.href;
+    let strippedUrl = currentUrl.replace(/^https?:\/\//, '');
+    let intentUrl = `intent://${strippedUrl}#Intent;package=com.android.chrome;scheme=https;end;`;
+
+    if (isRealChrome()) {
+        messageDiv.textContent = "Bạn đã ở trong Chrome rồi";
+        return;
+    }
+
+    if (confirm("Bạn có muốn mở liên kết này bằng Chrome không?")) {
+        window.location.href = intentUrl;
+    } else {
+        messageDiv.textContent = "Bạn đã chọn không mở trong Chrome.";
+    }
+
     setTimeout(() => {
-        window.open(currentUrl, '_blank');  // Fallback nếu không thể mở được bằng intent
+        window.open(currentUrl, '_blank');
     }, 2000);
 }
 </script>
