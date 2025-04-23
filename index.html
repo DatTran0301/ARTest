@@ -1,13 +1,34 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mở bằng Chrome</title>
+</head>
+<body>
+
+<!-- Nút để mở trong Chrome -->
+<button onclick="openInChrome()">Mở bằng Chrome</button>
+
+<script>
+function openInChrome() {
+    let currentUrl = window.location.href;  // Lấy URL hiện tại của trang
+    let strippedUrl = currentUrl.replace(/^https?:\/\//, '');  // Bỏ "http://" hoặc "https://"
+    let intentUrl = `intent://${strippedUrl}#Intent;package=com.android.chrome;scheme=https;end;`;
+
+    // Hộp thoại xác nhận người dùng có muốn mở bằng Chrome không
+    if (confirm("Bạn có muốn mở liên kết này bằng Chrome không?")) {
+        window.location.href = intentUrl;  // Sử dụng intent:// để mở bằng Chrome
+    } else {
+        alert("Bạn đã chọn không mở trong Chrome.");
+    }
+
+    // Nếu không thể mở bằng intent, sẽ mở bằng cửa sổ mới trong trình duyệt mặc định
+    setTimeout(() => {
+        window.open(currentUrl, '_blank');  // Fallback nếu không thể mở được bằng intent
+    }, 2000);
+}
+</script>
+
+</body>
 </html>
