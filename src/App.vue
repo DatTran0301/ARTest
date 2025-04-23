@@ -33,7 +33,7 @@ onMounted(() => {
   const ua = navigator.userAgent || navigator.vendor || window.opera
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
   const isInFacebookApp = ua.includes("FBAN") || ua.includes("FBAV")
-  const isChrome = ua.includes("Chrome") && !ua.includes("Edg") && !ua.includes("OPR") && !ua.includes("SamsungBrowser")
+  const isChrome = ua.includes("Chrome") && !ua.includes("Edg") && !ua.includes("OPR") && !ua.includes("SamsungBrowser") && !ua.includes("Zalo")
 
   if (isChrome && !isInFacebookApp) {
     showChromeOk.value = true
